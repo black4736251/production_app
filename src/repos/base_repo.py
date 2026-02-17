@@ -94,7 +94,6 @@ class Base:
                 """
             )
 
-            # total_price IS CALCULATED
             cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS movements_in(
@@ -102,7 +101,6 @@ class Base:
                     mat_code TEXT,
                     sup_code TEXT,
                     quantity INTEGER NOT NULL DEFAULT 0,
-                    total_price FLOAT NOT NULL DEFAULT 0,
                     created_at TEXT,
                     updated_at TEXT,
                     FOREIGN KEY(mat_code) REFERENCES materials(code),
@@ -191,6 +189,19 @@ class Base:
                         ), 0)
                     ) AS quantity
                 FROM materials m;
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE VIEW IF NOT EXISTS movements_in_details AS
+                SELECT
+                    mi.*,
+                    (
+                        COALESCE(mi.quantity, 0) *
+                        COALESCE((SELECT SUM(unit_price) FROM materials WHERE code = mi.mat_code), 0)
+                    ) AS total_price
+                FROM movements_in mi
                 """
             )
 
