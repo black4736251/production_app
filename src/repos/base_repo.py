@@ -138,14 +138,12 @@ class Base:
                 """
             )
 
-            # total_cost IS CALCULATED
             cursor.execute(
                 """
                 CREATE TABLE IF NOT EXISTS production_line(
                     nr INTEGER PRIMARY KEY AUTOINCREMENT,
                     pro_code TEXT,
                     quantity INTEGER NOT NULL DEFAULT 0,
-                    total_cost FLOAT NOT NULL DEFAULT 0,
                     created_at TEXT,
                     updated_at TEXT,
                     FOREIGN KEY(pro_code) REFERENCES products(code)
@@ -161,14 +159,18 @@ class Base:
                 CREATE VIEW IF NOT EXISTS product_details AS
                 SELECT 
                     p.*,
-                    COALESCE(SUM(pl.quantity), 0) - COALESCE(SUM(mo.quantity), 0) AS quantity,
-                    COALESCE(SUM(pm.quantity * m.unit_price), 0) AS production_cost
-                FROM products p
-                LEFT JOIN production_line pl ON p.code = pl.pro_code
-                LEFT JOIN movements_out mo ON p.code = mo.pro_code
-                LEFT JOIN product_materials pm ON p.code = pm.pro_code
-                LEFT JOIN materials m ON pm.mat_code = m.code
-                GROUP BY p.code;
+                    (
+                        COALESCE((SELECT SUM(quantity) FROM production_line WHERE pro_code = p.code), 0) - 
+                        COALESCE((SELECT SUM(quantity) FROM movements_out WHERE pro_code = p.code), 0)
+                    ) AS quantity,
+                    (
+                        SELECT COALESCE(SUM(pm.quantity * m.unit_price), 0)
+                        FROM product_materials pm
+                        JOIN materials m ON pm.mat_code = m.code
+                        WHERE pm.pro_code = p.code
+                    )
+                    AS production_cost
+                FROM products p;
                 """
             )
 
@@ -199,7 +201,7 @@ class Base:
                         COALESCE(mi.quantity, 0) *
                         COALESCE((SELECT SUM(unit_price) FROM materials WHERE code = mi.mat_code), 0)
                     ) AS total_price
-                FROM movements_in mi
+                FROM movements_in mi;
                 """
             )
 
@@ -212,7 +214,23 @@ class Base:
                         COALESCE(mo.quantity, 0) *
                         COALESCE((SELECT SUM(unit_price) FROM products WHERE code = mo.pro_code), 0)
                     ) AS total_price
-                FROM movements_out mo
+                FROM movements_out mo;
+                """
+            )
+
+            cursor.execute(
+                """
+                CREATE VIEW IF NOT EXISTS production_line_details AS
+                SELECT
+                    pl.*,
+                    (
+                        COALESCE(pl.quantity, 0) *
+                        COALESCE(
+                            (SELECT SUM(production_cost) FROM product_details WHERE code = pl.pro_code)
+                            , 0
+                        )
+                    ) AS total_cost
+                FROM production_line pl;
                 """
             )
 
