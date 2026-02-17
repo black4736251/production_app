@@ -1,4 +1,6 @@
 from contextlib import contextmanager
+from abc import abstractmethod
+
 import sqlite3
 
 
@@ -37,7 +39,7 @@ class Base:
                     city TEXT,
                     phone TEXT,
                     email TEXT,
-                    date_of_birth DATE,
+                    date_of_birth TEXT,
                     tax_id TEXT,
                     created_at TEXT,
                     updated_at TEXT
@@ -57,7 +59,7 @@ class Base:
                     city TEXT,
                     phone TEXT,
                     email TEXT,
-                    date_of_birth DATE,
+                    date_of_birth TEXT,
                     tax_id TEXT,
                     created_at TEXT,
                     updated_at TEXT
@@ -264,3 +266,6 @@ class Base:
                 ON production_line(pro_code);
                 """
             )
+
+    @abstractmethod
+    def save(self, record): ...
