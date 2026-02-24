@@ -1,11 +1,11 @@
-from models.client_model import Client
+from models.supplier_model import Supplier
 from repos.base_repo import Base
 
 
 class ClientRepo(Base):
-    def save(self, record: Client):
+    def save(self, record: Supplier):
         sql = """
-            INSERT INTO clients (code, first_name, last_name, cli_type, company_name, country, city, phone, email, date_of_birth, tax_id, created_at, updated_at)
+            INSERT INTO suppliers (code, first_name, last_name, sup_type, company_name, country, city, phone, email, date_of_birth, tax_id, created_at, updated_at)
             VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """
         with self.get_connection() as conn:
@@ -15,7 +15,7 @@ class ClientRepo(Base):
                     record.code,
                     record.first_name,
                     record.last_name,
-                    record.cli_type.value,
+                    record.sup_type.value,
                     record.company_name,
                     record.country,
                     record.city,
@@ -28,16 +28,16 @@ class ClientRepo(Base):
                 ),
             )
 
-    def delete(self, record: Client):
+    def delete(self, record: Supplier):
         sql = """
-            DELETE FROM clients WHERE code = ?
+            DELETE FROM suppliers WHERE code = ?
         """
         with self.get_connection() as conn:
             conn.execute(sql, (record.code,))
 
-    def get_all(self) -> dict[str, Client]:
+    def get_all(self) -> dict[str, Supplier]:
         sql = """
-            SELECT * FROM clients
+            SELECT * FROM suppliers
         """
         record_dict = {}
 
@@ -47,6 +47,6 @@ class ClientRepo(Base):
             record_list = cursor.fetchall()
 
         for record in record_list:
-            record_dict[record[0]] = Client(*record)
+            record_dict[record[0]] = Supplier(*record)
 
         return record_dict

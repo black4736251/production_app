@@ -27,8 +27,7 @@ class Base:
     def _create_schema(self):
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS suppliers(
                     code TEXT PRIMARY KEY NOT NULL,
                     first_name TEXT,
@@ -44,11 +43,9 @@ class Base:
                     created_at TEXT,
                     updated_at TEXT
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS clients(
                     code TEXT PRIMARY KEY NOT NULL,
                     first_name TEXT,
@@ -64,12 +61,10 @@ class Base:
                     created_at TEXT,
                     updated_at TEXT
                 );
-                """
-            )
+                """)
 
             # quantity IS CALCULATED
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS materials(
                     code TEXT PRIMARY KEY NOT NULL,
                     name TEXT,
@@ -79,11 +74,9 @@ class Base:
                     created_at TEXT,
                     updated_at TEXT
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS products(
                     code TEXT PRIMARY KEY NOT NULL,
                     name TEXT,
@@ -93,11 +86,9 @@ class Base:
                     created_at TEXT,
                     updated_at TEXT
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS movements_in(
                     nr INTEGER PRIMARY KEY AUTOINCREMENT,
                     mat_code TEXT,
@@ -108,11 +99,9 @@ class Base:
                     FOREIGN KEY(mat_code) REFERENCES materials(code),
                     FOREIGN KEY(sup_code) REFERENCES suppliers(code)
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS movements_out(
                     nr INTEGER PRIMARY KEY AUTOINCREMENT,
                     pro_code TEXT,
@@ -123,11 +112,9 @@ class Base:
                     FOREIGN KEY(pro_code) REFERENCES products(code),
                     FOREIGN KEY(cli_code) REFERENCES clients(code)
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS product_materials(
                     nr INTEGER PRIMARY KEY AUTOINCREMENT,
                     pro_code TEXT,
@@ -137,11 +124,9 @@ class Base:
                     FOREIGN KEY(pro_code) REFERENCES products(code),
                     FOREIGN KEY(mat_code) REFERENCES materials(code)
                 );
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE TABLE IF NOT EXISTS production_line(
                     nr INTEGER PRIMARY KEY AUTOINCREMENT,
                     pro_code TEXT,
@@ -150,14 +135,12 @@ class Base:
                     updated_at TEXT,
                     FOREIGN KEY(pro_code) REFERENCES products(code)
                 );
-                """
-            )
+                """)
 
     def _create_views(self):
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE VIEW IF NOT EXISTS product_details AS
                 SELECT 
                     p.*,
@@ -173,11 +156,9 @@ class Base:
                     )
                     AS production_cost
                 FROM products p;
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE VIEW IF NOT EXISTS material_details AS
                 SELECT 
                     m.*,
@@ -191,11 +172,9 @@ class Base:
                         ), 0)
                     ) AS quantity
                 FROM materials m;
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE VIEW IF NOT EXISTS movements_in_details AS
                 SELECT
                     mi.*,
@@ -204,11 +183,9 @@ class Base:
                         COALESCE((SELECT SUM(unit_price) FROM materials WHERE code = mi.mat_code), 0)
                     ) AS total_price
                 FROM movements_in mi;
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE VIEW IF NOT EXISTS movements_out_details AS
                 SELECT
                     mo.*,
@@ -217,11 +194,9 @@ class Base:
                         COALESCE((SELECT SUM(unit_price) FROM products WHERE code = mo.pro_code), 0)
                     ) AS total_price
                 FROM movements_out mo;
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE VIEW IF NOT EXISTS production_line_details AS
                 SELECT
                     pl.*,
@@ -233,39 +208,36 @@ class Base:
                         )
                     ) AS total_cost
                 FROM production_line pl;
-                """
-            )
+                """)
 
     def _create_indexes(self):
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_movements_in_mat_code
                 ON movements_in(mat_code);
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_product_materials_mat_code
                 ON product_materials(mat_code);
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_product_materials_pro_code
                 ON product_materials(pro_code);
-                """
-            )
+                """)
 
-            cursor.execute(
-                """
+            cursor.execute("""
                 CREATE INDEX IF NOT EXISTS idx_production_line_pro_code
                 ON production_line(pro_code);
-                """
-            )
+                """)
 
     @abstractmethod
     def save(self, record): ...
+
+    @abstractmethod
+    def delete(self, record): ...
+
+    @abstractmethod
+    def get_all(self) -> dict: ...
