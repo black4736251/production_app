@@ -27,7 +27,7 @@ class SupplierType(Enum):
 
 class ProductCategory(Enum):
     FINISHED_GOODS = "Produtos Acabados"
-    SEMI_FINISHED_GOODS = "Productos Semi-Acabados"
+    SEMI_FINISHED_GOODS = "Produtos Semi-Acabados"
     CUSTOM_PRODUCTS = "Produtos Personalizados"
     STANDARD_PRODUCTS = "Produtos Normalizados"
     KITS_AND_ASSEMBLIES = "Kits e Conjuntos"
