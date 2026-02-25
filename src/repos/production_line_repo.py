@@ -1,5 +1,4 @@
-from models.movement_in_model import MovementInRecord, MovementInView
-from models.production_line_model import ProductionLineRecord
+from models.production_line_model import ProductionLineRecord, ProductionLineView
 from repos.base_repo import Base
 
 
@@ -21,14 +20,14 @@ class ProductionLineRepo(Base):
                 ),
             )
 
-    def delete(self, record: MovementInRecord):
+    def delete(self, record: ProductionLineView):
         sql = """
             DELETE FROM production_line WHERE nr = ?
         """
         with self.get_connection() as conn:
             conn.execute(sql, (record.nr,))
 
-    def get_all(self) -> dict[str, MovementInView]:
+    def get_all(self) -> dict[str, ProductionLineView]:
         sql = """
             SELECT * FROM production_line
         """
@@ -40,6 +39,6 @@ class ProductionLineRepo(Base):
             record_list = cursor.fetchall()
 
         for record in record_list:
-            record_dict[record[0]] = MovementInView(*record)
+            record_dict[record[0]] = ProductionLineView(*record)
 
         return record_dict

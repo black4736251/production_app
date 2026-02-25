@@ -2,7 +2,7 @@ from models.supplier_model import Supplier
 from repos.base_repo import Base
 
 
-class ClientRepo(Base):
+class SupplierRepo(Base):
     def save(self, record: Supplier):
         sql = """
             INSERT INTO suppliers (code, first_name, last_name, sup_type, company_name, country, city, phone, email, date_of_birth, tax_id, created_at, updated_at)

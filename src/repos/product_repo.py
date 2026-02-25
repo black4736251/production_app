@@ -22,7 +22,7 @@ class ProductRepo(Base):
                 ),
             )
 
-    def delete(self, record: ProductRecord):
+    def delete(self, record: ProductView):
         sql = """
             DELETE FROM products WHERE code = ?
         """

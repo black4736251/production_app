@@ -21,7 +21,7 @@ class MovementOutRepo(Base):
                 ),
             )
 
-    def delete(self, record: MovementOutRecord):
+    def delete(self, record: MovementOutView):
         sql = """
             DELETE FROM movements_out WHERE nr = ?
         """

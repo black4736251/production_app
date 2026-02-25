@@ -22,7 +22,7 @@ class MaterialRepo(Base):
                 ),
             )
 
-    def delete(self, record: MaterialRecord):
+    def delete(self, record: MaterialView):
         sql = """
             DELETE FROM materials WHERE code = ?
         """

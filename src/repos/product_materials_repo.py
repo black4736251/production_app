@@ -2,7 +2,7 @@ from models.product_materials_model import ProductMaterials
 from repos.base_repo import Base
 
 
-class MovementOutRepo(Base):
+class ProductMaterialsRepo(Base):
     def save(self, record: ProductMaterials):
         sql = """
             INSERT INTO product_materials (nr, pro_code, quantity)
