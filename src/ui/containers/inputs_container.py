@@ -11,6 +11,28 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtSql import QSqlQuery
 from PySide6.QtGui import QDoubleValidator, QRegularExpressionValidator
+from core.settings import Settings
+from models import (
+    Client,
+    Supplier,
+    MaterialRecord,
+    ProductRecord,
+    MovementInRecord,
+    MovementOutRecord,
+    ProductionLineRecord,
+    ProductMaterials,
+)
+from repos import (
+    ClientRepo,
+    SupplierRepo,
+    MaterialRepo,
+    ProductRepo,
+    MovementInRepo,
+    MovementOutRepo,
+    ProductMaterialsRepo,
+    ProductionLineRepo,
+)
+from ui.components.input_factory import InputFactory
 
 
 class InputsContainer(QWidget):
@@ -18,50 +40,13 @@ class InputsContainer(QWidget):
         super().__init__()
         self.master = master
 
-        self.inputs: list[tuple[QLabel, QLineEdit | QComboBox | QDateEdit]] = []
+        self.inputs: list[tuple] = []
         self.relational_combos: list[tuple[str, QComboBox]] = []
+        print(self.master.COLUMN_NAMES)
         for col_name in self.master.COLUMN_NAMES:
-            input_widget = QLineEdit()
-            match self.master.column_info[col_name]["input_type"]:
-                case "line_edit":
-                    input_widget = QLineEdit()
-                    match self.master.column_info[col_name]["data_type"]:
-                        case "string":
-                            regex = QRegularExpression(r"[A-Za-z\-\ \á\à\ã\â]+")
-                            input_widget.setValidator(
-                                QRegularExpressionValidator(regex)
-                            )
-                        case "integer":
-                            regex = QRegularExpression(r"\d+")
-                            input_widget.setValidator(
-                                QRegularExpressionValidator(regex)
-                            )
-                        case "float":
-                            input_widget.setValidator(
-                                QDoubleValidator(bottom=0, decimals=2)
-                            )
-                        case "uppercase_only":
-                            regex = QRegularExpression(r"[A-Z0-9]+")
-                            input_widget.setValidator(
-                                QRegularExpressionValidator(regex)
-                            )
-                    input_widget.setMaxLength(
-                        self.master.column_info[col_name]["max_len"]
-                    )
-
-                case "combo_box":
-                    input_widget = QComboBox()
-                    values = self.master.column_info[col_name]["values"]
-                    if values[0] == "query":
-                        self.relational_combos.append((col_name, input_widget))
-                    else:
-                        input_widget.addItems(values)
-                case "date_edit":
-                    input_widget = QDateEdit()
-                    input_widget.setCalendarPopup(True)
-                    input_widget.setDisplayFormat("dd/MM/yyyy")
-                case "defaulted":
-                    continue
+            input_widget = InputFactory.create_widget(
+                self.master.column_info.get(col_name)
+            )
 
             self.inputs.append((QLabel(col_name), input_widget))
 
@@ -103,8 +88,7 @@ class InputsContainer(QWidget):
             input_widget.addItems(values)
 
     def insert_data(self):
-        query = self.prepare_insertion_query()
-
+        data = []
         for _, input_field in self.inputs:
             value = ""
             if isinstance(input_field, QLineEdit):
@@ -115,120 +99,38 @@ class InputsContainer(QWidget):
                 value = input_field.date().toString("dd/MM/yyyy")
 
             if value != "":
-                query.addBindValue(value)
+                data.append(value)
             else:
                 QMessageBox.warning(
                     self,
                     "Valor vazio",
                     "Confirme que preencheu todos os campos",
                 )
-                query.clear()
                 return
-        if not query.exec():
-            print(query.lastError().text())
 
-    def prepare_insertion_query(self) -> QSqlQuery:
-        query = QSqlQuery()
+        path = Settings.DB_PATH
         match self.master.TABLE_NAME:
             case "clients":
-                query.prepare(
-                    """
-                    INSERT INTO clients (
-                        code, first_name, last_name, cli_type, company_name,
-                        country, city, phone, email, date_of_birth, nif, created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = ClientRepo(path)
+                repo.save(Client(*data))
             case "suppliers":
-                query.prepare(
-                    """
-                    INSERT INTO suppliers (
-                        code, first_name, last_name, sup_type, company_name,
-                        country, city, phone, email, date_of_birth, nif, created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = SupplierRepo(path)
+                repo.save(Supplier(*data))
             case "materials":
-                query.prepare(
-                    """
-                    INSERT INTO materials (
-                        code, name, category, base_unit, unit_price, 
-                        created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?, ?, ?,
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = MaterialRepo(path)
+                repo.save(MaterialRecord(*data))
             case "products":
-                query.prepare(
-                    """
-                    INSERT INTO products (
-                        code, name, category, base_unit,
-                        unit_price, created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?, ?, ?,
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = ProductRepo(path)
+                repo.save(ProductRecord(*data))
             case "movements_in":
-                query.prepare(
-                    """
-                    INSERT INTO movements_in (
-                        mat_code, sup_code, quantity,
-                        created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?,
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = MovementInRepo(path)
+                repo.save(MovementInRecord(*data))
             case "movements_out":
-                query.prepare(
-                    """
-                    INSERT INTO movements_out (
-                        pro_code, cli_code, quantity,
-                        created_at, updated_at
-                    ) VALUES (
-                        ?, ?, ?,
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = MovementOutRepo(path)
+                repo.save(MovementOutRecord(*data))
             case "production_line":
-                query.prepare(
-                    """
-                    INSERT INTO production_line (
-                        pro_code, quantity,
-                        created_at, updated_at
-                    ) VALUES (
-                        ?, ?,
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime'), 
-                        STRFTIME('%d/%m/%Y', 'now', 'localtime')
-                    )
-                """
-                )
+                repo = ProductionLineRepo(path)
+                repo.save(ProductionLineRecord(*data))
             case "product_materials":
-                query.prepare(
-                    """
-                    INSERT INTO product_materials (
-                        pro_code, mat_code, quantity
-                    ) VALUES (
-                        ?, ?, ?
-                    )
-                """
-                )
-        return query
+                repo = ProductMaterialsRepo(path)
+                repo.save(ProductMaterials(*data))
