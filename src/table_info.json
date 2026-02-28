@@ -2,467 +2,446 @@
     "clients": {
         "table_name": "Clientes",
         "columns": {
-            "Codigo": {
+            "code": {
                 "max_len": 15,
                 "info_type": "header",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "code"
+                "name": "Código"
             },
-            "Primeiro Nome": {
+            "first_name": {
                 "max_len": 30,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "first_name"
+                "name": "Primeiro Nome"
             },
-            "Ultimo Nome": {
+            "last_name": {
                 "max_len": 30,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "last_name"
+                "name": "Último Nome"
             },
-            "Tipo": {
+            "cli_type": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["Empresarial", "Prestador de Servicos", "Corporativo", "Governo", "Particular"],
-                "db_name": "cli_type"
+                "enum": "client_type",
+                "name": "Tipo"
             },
-            "Nome da Empresa": {
+            "company_name": {
                 "max_len": 50,
                 "info_type": "general",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "company_name"
+                "name": "Nome da Empresa"
             },
-            "Pais": {
+            "country": {
                 "max_len": 35,
                 "info_type": "location",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "country"
+                "name": "País"
             },
-            "Cidade": {
+            "city": {
                 "max_len": 25,
                 "info_type": "location",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "city"
+                "name": "Cidade"
             },
-            "Telemovel": {
+            "phone": {
                 "max_len": 20,
                 "info_type": "contact",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "phone"
+                "name": "Telemóvel"
             },
-            "Email": {
+            "email": {
                 "max_len": 60,
                 "info_type": "contact",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "email"
+                "name": "Email"
             },
-            "Data de Nascimento": {
+            "date_of_birth": {
                 "info_type": "extra",
                 "input_type": "date_edit",
-                "db_name": "date_of_birth"
+                "name": "Data de Nascimento"
             },
-            "NIF": {
+            "nif": {
                 "max_len": 16,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "uppercase_only",
-                "db_name": "nif"
+                "name": "NIF"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "suppliers": {
         "table_name": "Fornecedores",
         "columns": {
-            "Codigo": {
+            "code": {
                 "max_len": 15,
                 "info_type": "header",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "code"
+                "name": "Código"
             },
-            "Primeiro Nome": {
+            "first_name": {
                 "max_len": 30,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "first_name"
+                "name": "Primeiro Nome"
             },
-            "Ultimo Nome": {
+            "last_name": {
                 "max_len": 30,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "last_name"
+                "name": "Último Nome"
             },
-            "Tipo": {
+            "sup_type": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [
-                  "Fornecedor de Materias-Primas",
-                  "Fornecedor de Componentes",
-                  "Fornecedor de Consumiveis",
-                  "Fornecedor de Embalagens",
-                  "Fornecedor de Pecas de Substituicao"
-                ],
-                "db_name": "sup_type"
+                "enum": "supplier_type",
+                "name": "Tipo"
             },
-            "Nome da Empresa": {
+            "company_name": {
                 "max_len": 50,
                 "info_type": "general",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "company_name"
+                "name": "Nome da Empresa"
             },
-            "Pais": {
+            "country": {
                 "max_len": 35,
                 "info_type": "location",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "country"
+                "name": "País"
             },
-            "Cidade": {
+            "city": {
                 "max_len": 25,
                 "info_type": "location",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "city"
+                "name": "Cidade"
             },
-            "Telemovel": {
+            "phone": {
                 "max_len": 20,
                 "info_type": "contact",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "phone"
+                "name": "Telemóvel"
             },
-            "Email": {
+            "email": {
                 "max_len": 60,
                 "info_type": "contact",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "email"
+                "name": "Email"
             },
-            "Data de Nascimento": {
+            "date_of_birth": {
                 "info_type": "extra",
                 "input_type": "date_edit",
-                "db_name": "date_of_birth"
+                "name": "Data de Nascimento"
             },
-            "NIF": {
+            "nif": {
                 "max_len": 16,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "uppercase_only",
-                "db_name": "nif"
+                "name": "NIF"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "materials": {
         "table_name": "Materiais",
         "columns": {
-            "Codigo": {
+            "code": {
                 "max_len": 15,
                 "info_type": "header",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "code"
+                "name": "Código"
             },
-            "Descricao": {
+            "name": {
                 "max_len": 60,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "name"
+                "name": "Descrição"
             },
-            "Categoria": {
+            "mat_category": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [
-                  "Materia-Prima",
-                  "Componente",
-                  "Consumivel",
-                  "Material de Embalagem",
-                  "Peca de Substituicao"
-                ],
-                "db_name": "category"
+                "enum": "material_category",
+                "name": "Categoria"
             },
-            "Unidade de Medida": {
+            "base_unit": {
                 "info_type": "extra",
                 "input_type": "combo_box",
-                "values": ["uni", "kg", "m", "l"],
-                "db_name": "base_unit"
+                "enum": "base_unit",
+                "name": "Unidade"
             },
-            "Preco Unitario": {
+            "unit_price": {
                 "max_len": 30,
                 "info_type": "general",
                 "input_type": "line_edit",
                 "data_type": "float",
-                "db_name": "unit_price"
+                "name": "Preço Unitário"
             },
-            "Quantidade": {
+            "quantity": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "products": {
         "table_name": "Produtos",
         "columns": {
-            "Codigo": {
+            "code": {
                 "max_len": 15,
                 "info_type": "header",
                 "input_type": "line_edit",
                 "data_type": "special",
-                "db_name": "code"
+                "name": "Código"
             },
-            "Nome": {
+            "name": {
                 "max_len": 60,
                 "info_type": "name",
                 "input_type": "line_edit",
                 "data_type": "string",
-                "db_name": "name"
+                "name": "Descrição"
             },
-            "Categoria": {
+            "pro_category": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": [
-                  "Produtos Acabados",
-                  "Produtos Semi-Acabados",
-                  "Kits e Conjuntos",
-                  "Produtos Personalizados",
-                  "Subprodutos e Coprodutos"
-                ],
-                "db_name": "category"
+                "enum": "product_category",
+                "name": "Categoria"
             },
-            "Unidade de Medida": {
+            "base_unit": {
                 "info_type": "extra",
                 "input_type": "combo_box",
-                "values": ["uni", "kg", "m", "l"],
-                "db_name": "base_unit"
+                "enum": "base_unit",
+                "name": "Unidade"
             },
-            "Preco Unitario": {
+            "unit_price": {
                 "max_len": 30,
                 "info_type": "general",
                 "input_type": "line_edit",
                 "data_type": "float",
-                "db_name": "unit_price"
+                "name": "Preço Unitário"
             },
-            "Quantidade": {
+            "quantity": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Custo de Producao": {
+            "production_cost": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "production_cost"
+                "name": "Custo de Produção"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "movements_in": {
         "table_name": "Movimentos de Entrada",
         "columns": {
-            "Numero": {
+            "nr": {
                 "info_type": "header",
                 "input_type": "defaulted",
-                "db_name": "nr"
+                "name": "Número"
             },
-            "Material": {
+            "mat_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM materials"],
-                "db_name": "mat_code"
+                "query": "SELECT code, name FROM materials",
+                "name": "Material"
             },
-            "Fornecedor": {
+            "sup_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM suppliers"],
-                "db_name": "sup_code"
+                "query": "SELECT code, first_name, last_name FROM suppliers",
+                "name": "Fornecedor"
             },
-            "Quantidade": {
+            "quantity": {
                 "max_len": 10,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Preco Total": {
+            "total_price": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "total_price"
+                "name": "Preço Total"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "movements_out": {
-        "table_name": "Movimentos de Saida",
+        "table_name": "Movimentos de Saída",
         "columns": {
-            "Numero": {
+            "nr": {
                 "info_type": "header",
                 "input_type": "defaulted",
-                "db_name": "nr"
+                "name": "Número"
             },
-            "Produto": {
+            "pro_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM products"],
-                "db_name": "pro_code"
+                "query": "SELECT code, name FROM products",
+                "name": "Produto"
             },
-            "Cliente": {
+            "cli_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM clients"],
-                "db_name": "cli_code"
+                "query": "SELECT code, first_name, last_name FROM clients",
+                "name": "Cliente"
             },
-            "Quantidade": {
+            "quantity": {
                 "max_len": 10,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Preco Total": {
+            "total_price": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "total_price"
+                "name": "Preço Total"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "production_line": {
-        "table_name": "Producao",
+        "table_name": "Produção",
         "columns": {
-            "Numero": {
+            "nr": {
                 "info_type": "header",
                 "input_type": "defaulted",
-                "db_name": "nr"
+                "name": "Número"
             },
-            "Produto": {
+            "pro_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM products"],
-                "db_name": "pro_code"
+                "name": "Produto"
             },
-            "Quantidade": {
+            "quantity": {
                 "max_len": 10,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Preco Total": {
+            "total_price": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "db_name": "total_price"
+                "name": "Preço Total"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     },
     "product_materials": {
         "table_name": "Materiais por Produto",
         "columns": {
-            "Produto": {
+            "pro_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM products"],
-                "db_name": "pro_code"
+                "name": "Produto"
             },
-            "Material": {
+            "mat_code": {
                 "info_type": "general",
                 "input_type": "combo_box",
-                "values": ["query", "SELECT code FROM materials"],
-                "db_name": "mat_code"
+                "name": "Material"
             },
-            "Quantidade": {
+            "quantity": {
                 "max_len": 10,
                 "info_type": "extra",
                 "input_type": "line_edit",
                 "data_type": "integer",
-                "db_name": "quantity"
+                "name": "Quantidade"
             },
-            "Criado em": {
+            "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "created_at"
+                "name": "Criado em"
             },
-            "Atualizado em": {
+            "updated_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
-                "db_name": "updated_at"
+                "name": "Atualizado em"
             }
         }
     }
