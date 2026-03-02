@@ -1,5 +1,4 @@
-from PySide6.QtSql import QSqlQuery
-from PySide6.QtWidgets import QLineEdit, QComboBox
+from PySide6.QtWidgets import QDateEdit, QLineEdit, QComboBox
 from PySide6.QtCore import QRegularExpression
 from PySide6.QtGui import QRegularExpressionValidator, QDoubleValidator
 
@@ -49,6 +48,11 @@ class InputFactory:
                         items = []
 
                 w.addItems(items)
+                return w
+            case "date_edit":
+                w = QDateEdit()
+                w.setCalendarPopup(True)
+
                 return w
 
         return QLineEdit()
