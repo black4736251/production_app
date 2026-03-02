@@ -411,10 +411,10 @@
                 "input_type": "defaulted",
                 "name": "Atualizado em"
             },
-            "total_price": {
+            "total_cost": {
                 "info_type": "extra",
                 "input_type": "defaulted",
-                "name": "Preço Total"
+                "name": "Custo Total"
             }
         }
     },
