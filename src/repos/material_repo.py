@@ -5,7 +5,7 @@ from repos.base_repo import Base
 class MaterialRepo(Base):
     def save(self, record: MaterialRecord):
         sql = """
-            INSERT INTO products (code, name, category, base_unit, unit_price, created_at, updated_at)
+            INSERT INTO materials (code, name, category, base_unit, unit_price, created_at, updated_at)
             VALUES(?, ?, ?, ?, ?, ?, ?)
         """
         with self.get_connection() as conn:
