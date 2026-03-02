@@ -16,7 +16,7 @@ class ProductRepo(Base):
                     record.name,
                     record.category.value,
                     record.base_unit.value,
-                    float(record.unit_price),
+                    float(str(record.unit_price).replace(",", ".")),
                     str(record.created_at),
                     str(record.updated_at),
                 ),
