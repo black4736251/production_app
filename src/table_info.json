@@ -213,11 +213,6 @@
                 "data_type": "float",
                 "name": "Preço Unitário"
             },
-            "quantity": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Quantidade"
-            },
             "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
@@ -227,6 +222,11 @@
                 "info_type": "log",
                 "input_type": "defaulted",
                 "name": "Atualizado em"
+            },
+            "quantity": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Quantidade"
             }
         }
     },
@@ -266,16 +266,6 @@
                 "data_type": "float",
                 "name": "Preço Unitário"
             },
-            "quantity": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Quantidade"
-            },
-            "production_cost": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Custo de Produção"
-            },
             "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
@@ -285,6 +275,16 @@
                 "info_type": "log",
                 "input_type": "defaulted",
                 "name": "Atualizado em"
+            },
+            "quantity": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Quantidade"
+            },
+            "production_cost": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Custo de Produção"
             }
         }
     },
@@ -317,11 +317,6 @@
                 "data_type": "integer",
                 "name": "Quantidade"
             },
-            "total_price": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Preço Total"
-            },
             "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
@@ -331,6 +326,11 @@
                 "info_type": "log",
                 "input_type": "defaulted",
                 "name": "Atualizado em"
+            },
+            "total_price": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Preço Total"
             }
         }
     },
@@ -363,11 +363,6 @@
                 "data_type": "integer",
                 "name": "Quantidade"
             },
-            "total_price": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Preço Total"
-            },
             "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
@@ -377,6 +372,11 @@
                 "info_type": "log",
                 "input_type": "defaulted",
                 "name": "Atualizado em"
+            },
+            "total_price": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Preço Total"
             }
         }
     },
@@ -401,11 +401,6 @@
                 "data_type": "integer",
                 "name": "Quantidade"
             },
-            "total_price": {
-                "info_type": "extra",
-                "input_type": "defaulted",
-                "name": "Preço Total"
-            },
             "created_at": {
                 "info_type": "log",
                 "input_type": "defaulted",
@@ -415,6 +410,11 @@
                 "info_type": "log",
                 "input_type": "defaulted",
                 "name": "Atualizado em"
+            },
+            "total_price": {
+                "info_type": "extra",
+                "input_type": "defaulted",
+                "name": "Preço Total"
             }
         }
     },
