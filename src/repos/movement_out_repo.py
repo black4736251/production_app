@@ -5,7 +5,7 @@ from repos.base_repo import Base
 class MovementOutRepo(Base):
     def save(self, record: MovementOutRecord):
         sql = """
-            INSERT INTO movements_out (nr, mat_code, sup_code, quantity, created_at, updated_at)
+            INSERT INTO movements_out (nr, pro_code, cli_code, quantity, created_at, updated_at)
             VALUES(?, ?, ?, ?, ?, ?)
         """
         with self.get_connection() as conn:
