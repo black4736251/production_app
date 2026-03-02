@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QGridLayout,
     QMessageBox,
 )
-from PySide6.QtSql import QSqlQuery
+from core.appstate import AppState
 from core.data_manager import DataManager
 from core.settings import Settings
 from models import (
@@ -63,6 +63,9 @@ class InputsContainer(QWidget):
                 self.master.column_info.get(col_name)
             )
 
+            input_reference = self.master.column_info.get(col_name).get("reference")
+            if input_reference and isinstance(input_widget, QComboBox):
+                self.relational_combos.append((input_reference, input_widget))
             self.inputs.append(
                 (
                     QLabel(self.master.column_info.get(col_name).get("name")),
@@ -94,18 +97,12 @@ class InputsContainer(QWidget):
         self.setLayout(self.grid)
 
     def update_combos(self):
-        for col_name, input_widget in self.relational_combos:
+        for table, input_widget in self.relational_combos:
             input_widget.clear()
 
-            query_str = self.master.column_info[col_name]["values"][1]
-            query = QSqlQuery()
-            query.exec(query_str)
-
-            values = []
-            while query.next():
-                values.append(query.value(0))
-
-            input_widget.addItems(values)
+            table_attr = getattr(AppState, table)
+            if table_attr:
+                input_widget.addItems(tuple(table_attr.keys()))
 
     def insert_data(self):
         data = []

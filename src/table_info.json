@@ -297,12 +297,14 @@
                 "name": "Número"
             },
             "mat_code": {
+                "reference": "materials",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "query": "SELECT code, name FROM materials",
                 "name": "Material"
             },
             "sup_code": {
+                "reference": "suppliers",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "query": "SELECT code, first_name, last_name FROM suppliers",
@@ -341,12 +343,14 @@
                 "name": "Número"
             },
             "pro_code": {
+                "reference": "products",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "query": "SELECT code, name FROM products",
                 "name": "Produto"
             },
             "cli_code": {
+                "reference": "clients",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "query": "SELECT code, first_name, last_name FROM clients",
@@ -385,6 +389,7 @@
                 "name": "Número"
             },
             "pro_code": {
+                "reference": "products",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "name": "Produto"
@@ -417,11 +422,13 @@
         "table_name": "Materiais por Produto",
         "columns": {
             "pro_code": {
+                "reference": "products",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "name": "Produto"
             },
             "mat_code": {
+                "reference": "materials",
                 "info_type": "general",
                 "input_type": "combo_box",
                 "name": "Material"
