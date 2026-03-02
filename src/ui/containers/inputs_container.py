@@ -32,7 +32,13 @@ from repos import (
     ProductMaterialsRepo,
     ProductionLineRepo,
 )
-from models.enums import ClientType, SupplierType, MaterialCategory, ProductCategory
+from models.enums import (
+    BaseUnit,
+    ClientType,
+    SupplierType,
+    MaterialCategory,
+    ProductCategory,
+)
 from ui.components.input_factory import InputFactory
 
 
@@ -111,15 +117,19 @@ class InputsContainer(QWidget):
             if isinstance(input_field, QLineEdit):
                 value = input_field.text()
             elif isinstance(input_field, QComboBox):
-                match self.master.TABLE_NAME:
-                    case "clients":
-                        value = ClientType(input_field.currentText())
-                    case "suppliers":
-                        value = SupplierType(input_field.currentText())
-                    case "materials":
-                        value = MaterialCategory(input_field.currentText())
-                    case "products":
-                        value = ProductCategory(input_field.currentText())
+                value = input_field.currentText()
+                try:
+                    match self.master.TABLE_NAME:
+                        case "clients":
+                            value = ClientType(value)
+                        case "suppliers":
+                            value = SupplierType(value)
+                        case "materials":
+                            value = MaterialCategory(value)
+                        case "products":
+                            value = ProductCategory(value)
+                except ValueError:
+                    value = BaseUnit(value)
             elif isinstance(input_field, QDateEdit):
                 value = input_field.date().toString("dd/MM/yyyy")
 
