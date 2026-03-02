@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Gestor de Produção v2")
 
         self.db_table_names = []
-        with open("src/table_info.json") as f:
+        with open("src/table_info.json", encoding="utf-8") as f:
             table_info = json.load(f)
             self.db_table_names = list(table_info.keys())
             self.table_names = [
