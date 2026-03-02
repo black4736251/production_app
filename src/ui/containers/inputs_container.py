@@ -37,6 +37,16 @@ from ui.components.input_factory import InputFactory
 
 
 class InputsContainer(QWidget):
+    MAPPING = {
+        "clients": (ClientRepo, Client),
+        "suppliers": (SupplierRepo, Supplier),
+        "materials": (MaterialRepo, MaterialRecord),
+        "products": (ProductRepo, ProductRecord),
+        "movements_in": (MovementInRepo, MovementInRecord),
+        "movements_out": (MovementOutRepo, MovementOutRecord),
+        "production_line": (ProductionLineRepo, ProductionLineRecord),
+        "product_materials": (ProductMaterialsRepo, ProductMaterials),
+    }
     data_inserted = Signal()
 
     def __init__(self, master):
@@ -121,32 +131,9 @@ class InputsContainer(QWidget):
                 )
                 return
 
-        path = Settings.DB_PATH
-        match self.master.TABLE_NAME:
-            case "clients":
-                repo = ClientRepo(path)
-                repo.save(Client(*data))
-            case "suppliers":
-                repo = SupplierRepo(path)
-                repo.save(Supplier(*data))
-            case "materials":
-                repo = MaterialRepo(path)
-                repo.save(MaterialRecord(*data))
-            case "products":
-                repo = ProductRepo(path)
-                repo.save(ProductRecord(*data))
-            case "movements_in":
-                repo = MovementInRepo(path)
-                repo.save(MovementInRecord(*data))
-            case "movements_out":
-                repo = MovementOutRepo(path)
-                repo.save(MovementOutRecord(*data))
-            case "production_line":
-                repo = ProductionLineRepo(path)
-                repo.save(ProductionLineRecord(*data))
-            case "product_materials":
-                repo = ProductMaterialsRepo(path)
-                repo.save(ProductMaterials(*data))
+        repo_class, record_class = self.MAPPING[self.master.TABLE_NAME]
+        repo = repo_class(Settings.DB_PATH)
+        repo.save(record_class(*data))
 
         self.data_manager.refresh_all()
         self.data_inserted.emit()
