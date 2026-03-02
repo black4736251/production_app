@@ -206,6 +206,6 @@ class DisplayWidget(QWidget):
             self.list.show()
 
     def get_column_names(self):
-        with open("src/table_info.json") as f:
+        with open("src/table_info.json", encoding="utf-8") as f:
             map = json.load(f)
         return map[self.TABLE_NAME]["columns"]

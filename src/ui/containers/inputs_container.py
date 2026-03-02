@@ -63,7 +63,12 @@ class InputsContainer(QWidget):
                 self.master.column_info.get(col_name)
             )
 
-            self.inputs.append((QLabel(col_name), input_widget))
+            self.inputs.append(
+                (
+                    QLabel(self.master.column_info.get(col_name).get("name")),
+                    input_widget,
+                )
+            )
 
         self.grid = QGridLayout()
         row = 0
