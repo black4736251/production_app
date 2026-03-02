@@ -72,7 +72,8 @@ class DataContainer(QWidget):
                 QLabel(info_type), 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft
             )
             container_row = 1
-            for col_name, col_data in self.data_dict[info_type]:
+            for col, col_data in self.data_dict[info_type]:
+                col_name = self.master.master.column_info[col]["name"]
                 self.containers[-1].addWidget(
                     QLabel(f"{col_name} : {col_data}"),
                     container_row,

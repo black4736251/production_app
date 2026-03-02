@@ -1,10 +1,11 @@
 from PySide6.QtCore import Signal
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QAbstractItemView, QListWidget, QListWidgetItem
-from PySide6.QtSql import QSqlQuery
+from dataclasses import astuple
 
 from ui.containers.data_container import DataContainer
 from ui.containers.popup_container import PopupContainer
+from core.appstate import AppState
 
 
 class ListWidget(QListWidget):
@@ -27,13 +28,18 @@ class ListWidget(QListWidget):
     def load(self):
         self.clear()
 
-        query = QSqlQuery()
-        query.exec(f"SELECT * FROM {self.TABLE_NAME}")
-        while query.next():
-            values = [str(query.value(i)) for i in range(query.record().count())]
+        table_attr = getattr(AppState, self.TABLE_NAME, None)
+
+        if table_attr is not None:
+            data = list(table_attr.values())
+        else:
+            raise Exception("Failed to get data")
+
+        for record in data:
+            record_tuple = astuple(record)
             item = QListWidgetItem(self)
-            item.setData(Qt.ItemDataRole.UserRole, values[0])
-            container = DataContainer(self, values)
+            item.setData(Qt.ItemDataRole.UserRole, record_tuple[0])
+            container = DataContainer(self, record_tuple)
 
             item.setSizeHint(container.sizeHint())
             self.setItemWidget(item, container)
