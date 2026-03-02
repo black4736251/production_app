@@ -1,9 +1,10 @@
+from dataclasses import astuple
 from PySide6.QtCore import Signal
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import QAbstractItemView, QTableWidget, QTableWidgetItem
-from PySide6.QtSql import QSqlQuery
 
 from ui.containers.popup_container import PopupContainer
+from core.appstate import AppState
 
 
 class TableWidget(QTableWidget):
@@ -30,14 +31,19 @@ class TableWidget(QTableWidget):
 
     def load(self):
         self.setRowCount(0)
+        table_attr = getattr(AppState, self.TABLE_NAME, None)
 
-        query = QSqlQuery()
-        query.exec(f"SELECT * FROM {self.master.TABLE_NAME}")
+        if table_attr is not None:
+            data = list(table_attr.values())
+        else:
+            raise Exception("Failed to get data")
+
         row = 0
-        while query.next():
+        for record in data:
             self.insertRow(row)
-            for col in range(query.record().count()):
-                self.setItem(row, col, QTableWidgetItem(str(query.value(col))))
+            record_tuple = astuple(record)
+            for col in range(len(record_tuple)):
+                self.setItem(row, col, QTableWidgetItem(str(record_tuple[col])))
 
             row += 1
         self.resizeColumnsToContents()
