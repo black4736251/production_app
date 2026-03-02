@@ -1,4 +1,4 @@
-from PySide6.QtCore import QRegularExpression
+from PySide6.QtCore import Signal
 from PySide6.QtWidgets import (
     QWidget,
     QLabel,
@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 from PySide6.QtSql import QSqlQuery
-from PySide6.QtGui import QDoubleValidator, QRegularExpressionValidator
+from core.data_manager import DataManager
 from core.settings import Settings
 from models import (
     Client,
@@ -32,18 +32,23 @@ from repos import (
     ProductMaterialsRepo,
     ProductionLineRepo,
 )
+from models.enums import ClientType, SupplierType, MaterialCategory, ProductCategory
 from ui.components.input_factory import InputFactory
 
 
 class InputsContainer(QWidget):
+    data_inserted = Signal()
+
     def __init__(self, master):
         super().__init__()
         self.master = master
+        self.data_manager = DataManager()
 
         self.inputs: list[tuple] = []
         self.relational_combos: list[tuple[str, QComboBox]] = []
-        print(self.master.COLUMN_NAMES)
         for col_name in self.master.COLUMN_NAMES:
+            if self.master.column_info.get(col_name).get("input_type") == "defaulted":
+                continue
             input_widget = InputFactory.create_widget(
                 self.master.column_info.get(col_name)
             )
@@ -94,7 +99,15 @@ class InputsContainer(QWidget):
             if isinstance(input_field, QLineEdit):
                 value = input_field.text()
             elif isinstance(input_field, QComboBox):
-                value = input_field.currentText()
+                match self.master.TABLE_NAME:
+                    case "clients":
+                        value = ClientType(input_field.currentText())
+                    case "suppliers":
+                        value = SupplierType(input_field.currentText())
+                    case "materials":
+                        value = MaterialCategory(input_field.currentText())
+                    case "products":
+                        value = ProductCategory(input_field.currentText())
             elif isinstance(input_field, QDateEdit):
                 value = input_field.date().toString("dd/MM/yyyy")
 
@@ -134,3 +147,6 @@ class InputsContainer(QWidget):
             case "product_materials":
                 repo = ProductMaterialsRepo(path)
                 repo.save(ProductMaterials(*data))
+
+        self.data_manager.refresh_all()
+        self.data_inserted.emit()
