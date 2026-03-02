@@ -27,11 +27,18 @@ class DataContainer(QWidget):
 
         self.name = ""
         self.data_dict = {
-            "General": [],
-            "Location": [],
-            "Contact": [],
-            "Extra": [],
-            "Log": [],
+            "general": [],
+            "location": [],
+            "contact": [],
+            "extra": [],
+            "log": [],
+        }
+        self.info_names = {
+            "general": "Geral",
+            "location": "Localização",
+            "contact": "Contacto",
+            "extra": "Extra",
+            "log": "Log",
         }
 
         for i, col in enumerate(self.master.master.COLUMN_NAMES):
@@ -45,7 +52,7 @@ class DataContainer(QWidget):
                 case "name":
                     self.name += f"{data[i]} "
                 case _:
-                    self.data_dict[info_type.capitalize()].append((col, data[i]))
+                    self.data_dict[info_type].append((col, data[i]))
 
         name_label = QLabel(self.name.strip())
         name_label.setStyleSheet("QLabel {font: bold 14px; padding-bottom: 1px;}")
@@ -62,6 +69,7 @@ class DataContainer(QWidget):
         grid_row = 0
         grid_col = 0
         for info_type in self.data_dict.keys():
+            info_name = self.info_names[info_type]
             if len(self.data_dict[info_type]) <= 0:
                 continue
 
@@ -69,7 +77,7 @@ class DataContainer(QWidget):
             self.containers[-1].setColumnStretch(0, 1)
             self.containers[-1].setColumnStretch(1, 6)
             self.containers[-1].addWidget(
-                QLabel(info_type), 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft
+                QLabel(info_name), 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft
             )
             container_row = 1
             for col, col_data in self.data_dict[info_type]:
