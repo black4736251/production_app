@@ -11,9 +11,7 @@ from core.settings import Settings
 
 
 class DataManager:
-    def __init__(self, state: AppState):
-        self.state = state
-
+    def __init__(self):
         self.client_repo = ClientRepo(Settings.DB_PATH)
         self.supplier_repo = SupplierRepo(Settings.DB_PATH)
         self.material_repo = MaterialRepo(Settings.DB_PATH)
@@ -24,11 +22,11 @@ class DataManager:
         self.product_materials_repo = ProductMaterialsRepo(Settings.DB_PATH)
 
     def refresh_all(self):
-        self.state.clients = self.client_repo.get_all()
-        self.state.suppliers = self.supplier_repo.get_all()
-        self.state.materials = self.material_repo.get_all()
-        self.state.products = self.product_repo.get_all()
-        self.state.movements_in = self.movement_in_repo.get_all()
-        self.state.movements_out = self.movement_out_repo.get_all()
-        self.state.production_line = self.production_line_repo.get_all()
-        self.state.product_materials = self.product_materials_repo.get_all()
+        AppState.clients = self.client_repo.get_all()
+        AppState.suppliers = self.supplier_repo.get_all()
+        AppState.materials = self.material_repo.get_all()
+        AppState.products = self.product_repo.get_all()
+        AppState.movements_in = self.movement_in_repo.get_all()
+        AppState.movements_out = self.movement_out_repo.get_all()
+        AppState.production_line = self.production_line_repo.get_all()
+        AppState.product_materials = self.product_materials_repo.get_all()
