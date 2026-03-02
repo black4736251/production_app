@@ -8,7 +8,6 @@ _id_counter = count(1)
 
 @dataclass(frozen=True)
 class ProductionLineRecord:
-    nr: int
     pro_code: str
     quantity: int
     nr: int = field(default_factory=lambda: next(_id_counter))
