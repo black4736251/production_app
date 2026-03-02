@@ -103,26 +103,6 @@ class DisplayWidget(QWidget):
     def insert_values(self):
         self.inputs.insert_data()
 
-        # match self.TABLE_NAME:
-        #     case "products":
-        #         calculate_mov_out_price()
-        #         calculate_prod_line_cost()
-        #     case "materials":
-        #         calculate_pro_cost()
-        #         calculate_prod_line_cost()
-        #         calculate_mov_in_price()
-        #         calculate_mat_quant()
-        #     case "production_line":
-        #         calculate_pro_quant()
-        #         calculate_mat_quant()
-        #         calculate_prod_line_cost()
-        #     case "movements_in":
-        #         calculate_mat_quant()
-        #         calculate_mov_in_price()
-        #     case "movements_out":
-        #         calculate_pro_quant()
-        #         calculate_mov_out_price()
-
         self.table.load()
         self.list.load()
         self.data_changed.emit()
@@ -169,25 +149,6 @@ class DisplayWidget(QWidget):
             repo = repo_class(Settings.DB_PATH)
             repo.delete(record)
 
-            # match self.TABLE_NAME:
-            #     case "products":
-            #         calculate_mov_out_price()
-            #         calculate_prod_line_cost()
-            #     case "materials":
-            #         calculate_pro_cost()
-            #         calculate_prod_line_cost()
-            #         calculate_mov_in_price()
-            #         calculate_mat_quant()
-            #     case "production_line":
-            #         calculate_pro_quant()
-            #         calculate_mat_quant()
-            #         calculate_prod_line_cost()
-            #     case "movements_in":
-            #         calculate_mat_quant()
-            #         calculate_mov_in_price()
-            #     case "movements_out":
-            #         calculate_pro_quant()
-            #         calculate_mov_out_price()
         self.data_manager.refresh_all()
         self.table.load()
         self.list.load()
