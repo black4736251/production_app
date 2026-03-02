@@ -23,7 +23,7 @@ class TableWidget(QTableWidget):
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
-        self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
