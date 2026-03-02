@@ -48,7 +48,7 @@ class DataContainer(QWidget):
                     self.data_dict[info_type.capitalize()].append((col, data[i]))
 
         name_label = QLabel(self.name.strip())
-        name_label.setStyleSheet("QLabel {font: bold 14px}")
+        name_label.setStyleSheet("QLabel {font: bold 14px; padding-bottom: 1px;}")
         self.header_layout.addWidget(name_label)
         self.header_layout.setStretch(0, 1)
         self.header_layout.setStretch(1, 5)
