@@ -112,6 +112,16 @@ class InputsContainer(QWidget):
 
     def insert_data(self):
         data = []
+        table_attr = getattr(AppState, self.master.TABLE_NAME)
+        repo_class, record_class = self.MAPPING[self.master.TABLE_NAME]
+        if repo_class in (
+            ProductMaterialsRepo,
+            ProductionLineRepo,
+            MovementOutRepo,
+            MovementInRepo,
+        ):
+            data.append(list(table_attr.keys())[-1] + 1)
+
         for _, input_field in self.inputs:
             value = ""
             if isinstance(input_field, QLineEdit):
@@ -143,7 +153,6 @@ class InputsContainer(QWidget):
                 )
                 return
 
-        repo_class, record_class = self.MAPPING[self.master.TABLE_NAME]
         repo = repo_class(Settings.DB_PATH)
         repo.save(record_class(*data))
 
