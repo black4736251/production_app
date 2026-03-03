@@ -55,7 +55,7 @@ class DataContainer(QWidget):
                     self.data_dict[info_type].append((col, data[i]))
 
         name_label = QLabel(self.name.strip())
-        name_label.setStyleSheet("QLabel {font: bold 14px; padding-bottom: 1px;}")
+        name_label.setStyleSheet("QLabel {font: bold 14px}")
         self.header_layout.addWidget(name_label)
         self.header_layout.setStretch(0, 1)
         self.header_layout.setStretch(1, 5)
@@ -73,11 +73,18 @@ class DataContainer(QWidget):
             if len(self.data_dict[info_type]) <= 0:
                 continue
 
+            info_label = QLabel(info_name)
+            info_label.setStyleSheet("""
+            QLabel {
+                    font: bold 14px;
+                    min-height: 20px
+                }
+             """)
             self.containers.append(QGridLayout())
             self.containers[-1].setColumnStretch(0, 1)
             self.containers[-1].setColumnStretch(1, 6)
             self.containers[-1].addWidget(
-                QLabel(info_name), 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft
+                info_label, 0, 0, 1, 2, Qt.AlignmentFlag.AlignLeft
             )
             container_row = 1
             for col, col_data in self.data_dict[info_type]:
