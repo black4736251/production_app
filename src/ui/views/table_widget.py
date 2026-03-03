@@ -19,7 +19,12 @@ class TableWidget(QTableWidget):
         self.column_info = self.master.column_info
 
         self.setColumnCount(len(self.COLUMN_NAMES))
-        self.setHorizontalHeaderLabels(self.COLUMN_NAMES)
+        self.setHorizontalHeaderLabels(
+            [
+                self.column_info[self.COLUMN_NAMES[col]]["name"]
+                for col in range(len(self.column_info))
+            ]
+        )
         self.horizontalHeader().setSectionsClickable(True)
         self.verticalHeader().setVisible(False)
         self.setAlternatingRowColors(True)
