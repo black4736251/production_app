@@ -5,8 +5,8 @@ from repos.base_repo import Base
 class ProductMaterialsRepo(Base):
     def save(self, record: ProductMaterials):
         sql = """
-            INSERT INTO product_materials (nr, pro_code, quantity)
-            VALUES(?, ?, ?)
+            INSERT INTO product_materials (nr, pro_code, mat_code, quantity)
+            VALUES(?, ?, ?, ?)
         """
         with self.get_connection() as conn:
             conn.execute(
