@@ -1,5 +1,6 @@
-from PySide6.QtSql import QSqlQuery
 from PySide6.QtWidgets import QAbstractItemView, QTreeWidget, QTreeWidgetItem
+
+from core.appstate import AppState
 
 
 class TreeWidget(QTreeWidget):
@@ -16,19 +17,16 @@ class TreeWidget(QTreeWidget):
     def load(self):
         self.clear()
 
-        query = QSqlQuery()
-        query.exec(
-            f"SELECT pro_code, mat_code, quantity FROM product_materials ORDER BY pro_code"
-        )
+        data = sorted(AppState.product_materials.values(), key=lambda x: x.pro_code)
 
         items = []
         current_product = None
         item = QTreeWidgetItem()
 
-        while query.next():
-            product = query.value(0)
-            material = query.value(1)
-            quantity = str(query.value(2))
+        for record in data:
+            product = str(record.pro_code)
+            material = str(record.mat_code)
+            quantity = str(record.quantity)
 
             if product != current_product:
                 if item.childCount() > 0:
