@@ -29,7 +29,7 @@ class ProductionLineRepo(Base):
 
     def get_all(self) -> dict[str, ProductionLineView]:
         sql = """
-            SELECT * FROM production_line
+            SELECT * FROM production_line_details
         """
         record_dict = {}
 
