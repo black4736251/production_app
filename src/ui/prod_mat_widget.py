@@ -1,6 +1,5 @@
 import json
 from PySide6.QtCore import Qt, Signal
-from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
@@ -9,11 +8,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from sql.manager import (
-    calculate_mat_quant,
-    calculate_pro_cost,
-    calculate_prod_line_cost,
-)
+from core.data_manager import DataManager
 from ui.containers.inputs_container import InputsContainer
 from ui.views.tree_widget import TreeWidget
 
@@ -26,6 +21,7 @@ class ProdMatWidget(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         self.TABLE_NAME = "product_materials"
+        self.data_manager = DataManager()
 
         self.column_info = self.get_column_names()
         self.COLUMN_NAMES = list(self.column_info.keys())
@@ -59,26 +55,11 @@ class ProdMatWidget(QWidget):
         return map[self.TABLE_NAME]["columns"]
 
     def insert_values(self):
-        db = QSqlDatabase.database()
-        if not db.transaction():
-            return
+        self.inputs.insert_data()
 
-        try:
-            self.inputs.insert_data()
-            calculate_pro_cost()
-            calculate_prod_line_cost()
-            calculate_mat_quant()
-
-            db.commit()
-            self.data_changed.emit()
-
-        except Exception as e:
-            db.rollback()
-            QMessageBox.critical(
-                None, "Operacao nao concluida", f"Insercao cancelada: {str(e)}"
-            )
-        finally:
-            self.tree.load()
+        self.tree.load()
+        self.data_changed.emit()
+        self.data_manager.refresh_all()
 
     def delete_values(self):
         db = QSqlDatabase.database()
@@ -102,9 +83,6 @@ class ProdMatWidget(QWidget):
             return
         try:
             query.exec()
-            calculate_pro_cost()
-            calculate_prod_line_cost()
-            calculate_mat_quant()
 
             db.commit()
             self.data_changed.emit()

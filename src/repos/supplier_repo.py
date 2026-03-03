@@ -15,7 +15,7 @@ class SupplierRepo(Base):
                     record.code,
                     record.first_name,
                     record.last_name,
-                    record.sup_type.value,
+                    record.sup_type,
                     record.company_name,
                     record.country,
                     record.city,

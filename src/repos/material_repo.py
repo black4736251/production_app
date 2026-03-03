@@ -14,8 +14,8 @@ class MaterialRepo(Base):
                 (
                     record.code,
                     record.name,
-                    record.category.value,
-                    record.base_unit.value,
+                    record.category,
+                    record.base_unit,
                     float(str(record.unit_price).replace(",", ".")),
                     str(record.created_at),
                     str(record.updated_at),

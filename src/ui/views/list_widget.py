@@ -53,7 +53,10 @@ class ListWidget(QListWidget):
 
         self.popup = PopupContainer(self, item=item)
         self.popup.move(global_pos)
-        self.popup.updated.connect(lambda: self.updated.emit())
-        self.master.update_views()
+        self.popup.updated.connect(self.on_update)
 
         self.popup.show()
+
+    def on_update(self):
+        self.master.update_views()
+        self.updated.emit()

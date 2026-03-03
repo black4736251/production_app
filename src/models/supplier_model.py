@@ -2,15 +2,13 @@ from dataclasses import dataclass, field
 from typing import Optional
 import datetime
 
-from models.enums import SupplierType
-
 
 @dataclass(frozen=True)
 class Supplier:
     code: str
     first_name: str
     last_name: str
-    sup_type: SupplierType
+    sup_type: str
     company_name: Optional[str]
     country: str
     city: str

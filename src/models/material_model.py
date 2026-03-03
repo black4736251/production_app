@@ -2,15 +2,13 @@ from dataclasses import dataclass, field
 from decimal import Decimal
 import datetime
 
-from models.enums import BaseUnit, MaterialCategory
-
 
 @dataclass(frozen=True)
 class MaterialRecord:
     code: str
     name: str
-    category: MaterialCategory
-    base_unit: BaseUnit
+    category: str
+    base_unit: str
     unit_price: Decimal
     created_at: datetime.date = field(default_factory=datetime.date.today)
     updated_at: datetime.date = field(default_factory=datetime.date.today)

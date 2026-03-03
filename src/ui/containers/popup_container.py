@@ -1,30 +1,55 @@
+from dataclasses import astuple, asdict
 from PySide6.QtCore import QDate, Qt, Signal
-from PySide6.QtSql import QSqlDatabase, QSqlQuery
 from PySide6.QtWidgets import (
     QComboBox,
     QDateEdit,
     QLabel,
     QLineEdit,
-    QMessageBox,
     QVBoxLayout,
     QPushButton,
     QHBoxLayout,
     QWidget,
 )
-
-from ui.containers.inputs_container import InputsContainer
-from sql.manager import (
-    calculate_mat_quant,
-    calculate_prod_line_cost,
-    calculate_pro_cost,
-    calculate_pro_quant,
-    calculate_mov_out_price,
-    calculate_mov_in_price,
+from core.data_manager import DataManager
+from core.settings import Settings
+from models import (
+    Client,
+    Supplier,
+    MaterialRecord,
+    ProductRecord,
+    MovementInRecord,
+    MovementOutRecord,
+    ProductionLineRecord,
+    ProductMaterials,
 )
+from repos import (
+    ClientRepo,
+    SupplierRepo,
+    MaterialRepo,
+    ProductRepo,
+    MovementInRepo,
+    MovementOutRepo,
+    ProductMaterialsRepo,
+    ProductionLineRepo,
+)
+
+from core.appstate import AppState
+from ui.containers.inputs_container import InputsContainer
 
 
 class PopupContainer(QWidget):
     updated = Signal()
+
+    MAPPING = {
+        "clients": (ClientRepo, Client),
+        "suppliers": (SupplierRepo, Supplier),
+        "materials": (MaterialRepo, MaterialRecord),
+        "products": (ProductRepo, ProductRecord),
+        "movements_in": (MovementInRepo, MovementInRecord),
+        "movements_out": (MovementOutRepo, MovementOutRecord),
+        "production_line": (ProductionLineRepo, ProductionLineRecord),
+        "product_materials": (ProductMaterialsRepo, ProductMaterials),
+    }
 
     def __init__(self, master, row=None, item=None):
         super().__init__()
@@ -36,12 +61,18 @@ class PopupContainer(QWidget):
         self.column_info = self.master.column_info
         self.setWindowFlags(Qt.WindowType.Popup)
         self.hasNr = False
+        self.record_old = None
+        self.data_manager = DataManager()
 
         self.inputs_container = InputsContainer(master)
         self.inputs_container.update_combos()
 
         self.title = QLabel("Edit")
         self.title.setStyleSheet("font: bold 20px")
+        self.name_mapping = {
+            k[0].text(): v
+            for k, v in zip(self.inputs_container.inputs, self.column_info)
+        }
 
         self.start = 0
         if self.TABLE_NAME in ("movements_in", "movements_out", "production_line"):
@@ -67,20 +98,13 @@ class PopupContainer(QWidget):
 
         elif item is not None:
             id = item.data(Qt.ItemDataRole.UserRole)
-            query = QSqlQuery()
+            self.id = id
 
-            if self.hasNr:
-                query.prepare(f"SELECT * FROM {self.TABLE_NAME} WHERE nr = ?")
-            else:
-                query.prepare(f"SELECT * FROM {self.TABLE_NAME} WHERE code = ?")
-            query.addBindValue(id)
+            table_attr = getattr(AppState, self.TABLE_NAME)
+            self.record_old = astuple(table_attr[id])
 
-            query.exec()
-
-            query.first()
-            values = [str(query.value(i)) for i in range(query.record().count())]
-            for i in range(self.start, len(self.inputs_container.inputs) + self.start):
-                value = values[i]
+            for i in range(self.start, len(self.record_old) - 2 + self.start):
+                value = self.record_old[i - self.start]
                 input_widget = self.inputs_container.inputs[i - self.start][1]
 
                 if isinstance(input_widget, QLineEdit):
@@ -114,20 +138,20 @@ class PopupContainer(QWidget):
         self.setLayout(self.popup_layout)
 
     def confirm(self):
-        query = QSqlQuery()
         col_val = ""
         values = []
         code = ""
         if self.row is not None:
             code = self.master.model().index(self.row, 0).data()
         elif self.item:
-            code = self.item.data(Qt.ItemDataRole.UserRole)
+            code = self.id
+
+        table_attr = getattr(AppState, self.TABLE_NAME)
+        self.record_old = asdict(table_attr[code])
 
         for i in range(len(self.inputs_container.inputs)):
             input_field = self.inputs_container.inputs[i][1]
-            col_name = self.column_info[self.inputs_container.inputs[i][0].text()][
-                "db_name"
-            ]
+            col_name = self.name_mapping[self.inputs_container.inputs[i][0].text()]
             value = ""
 
             if isinstance(input_field, QLineEdit):
@@ -143,58 +167,17 @@ class PopupContainer(QWidget):
             if i < len(self.inputs_container.inputs) - 1:
                 col_val += ", "
 
-        code_or_nr = ""
-        if self.hasNr:
-            code_or_nr = "nr"
-        else:
-            code_or_nr = "code"
+        table_attr = getattr(AppState, self.master.TABLE_NAME)
+        repo_class, record_class = self.MAPPING[self.master.TABLE_NAME]
+        record_new = None
+        if self.record_old:
+            record_new = record_class(created_at=self.record_old["created_at"], *values)
 
-        query.prepare(
-            f"""
-            UPDATE {self.master.TABLE_NAME}
-            SET updated_at = STRFTIME('%d/%m/%Y', 'now', 'localtime'), {col_val}
-            WHERE {code_or_nr} = ?
-        """
-        )
+            repo = repo_class(Settings.DB_PATH)
+            repo.delete(record_class(**self.record_old))
+            repo.save(record_new)
 
-        for value in values:
-            query.addBindValue(value)
+        self.data_manager.refresh_all()
+        self.updated.emit()
 
-        query.addBindValue(code)
-        db = QSqlDatabase.database()
-        if not db.transaction():
-            return
-
-        try:
-            query.exec()
-            match self.TABLE_NAME:
-                case "products":
-                    calculate_mov_out_price()
-                    calculate_prod_line_cost()
-                case "materials":
-                    calculate_pro_cost()
-                    calculate_prod_line_cost()
-                    calculate_mov_in_price()
-                    calculate_mat_quant()
-                case "production_line":
-                    calculate_pro_quant()
-                    calculate_mat_quant()
-                    calculate_prod_line_cost()
-                case "movements_in":
-                    calculate_mat_quant()
-                    calculate_mov_in_price()
-                case "movements_out":
-                    calculate_pro_quant()
-                    calculate_mov_out_price()
-
-            db.commit()
-            self.updated.emit()
-
-        except Exception as e:
-            db.rollback()
-            QMessageBox.critical(
-                None, "Operation failed", f"Insertion aborted: {str(e)}"
-            )
-
-        finally:
-            self.hide()
+        self.hide()

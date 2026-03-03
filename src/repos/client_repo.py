@@ -15,7 +15,7 @@ class ClientRepo(Base):
                     record.code,
                     record.first_name,
                     record.last_name,
-                    record.cli_type.value,
+                    record.cli_type,
                     record.company_name,
                     record.country,
                     record.city,

@@ -2,15 +2,13 @@ from dataclasses import dataclass, field
 from typing import Optional
 import datetime
 
-from models.enums import ClientType
-
 
 @dataclass(frozen=True)
 class Client:
     code: str
     first_name: str
     last_name: str
-    cli_type: ClientType
+    cli_type: str
     company_name: Optional[str]
     country: str
     city: str
