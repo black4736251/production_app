@@ -48,9 +48,13 @@ class TotalBoughtByMaterialCategory(QChartView):
 
         for slc in self.series.slices():
             slc.setLabelVisible(True)
-            slc.setLabelPosition(QPieSlice.LabelPosition.LabelInsideHorizontal)
+            if slc.percentage() < 0.05:
+                slc.setLabelPosition(QPieSlice.LabelPosition.LabelOutside)
+                slc.setLabelColor(QColor("black"))
+            else:
+                slc.setLabelPosition(QPieSlice.LabelPosition.LabelInsideHorizontal)
+                slc.setLabelColor(QColor("white"))
             slc.setLabel(f"{slc.percentage() * 100:.1f}%")
-            slc.setLabelColor(QColor("white"))
             slc.setLabelFont(QFont("Arial", 10, QFont.Weight.Bold))
 
         self.setChart(chart)
