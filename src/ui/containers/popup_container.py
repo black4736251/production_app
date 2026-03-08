@@ -149,6 +149,11 @@ class PopupContainer(QWidget):
         table_attr = getattr(AppState, self.TABLE_NAME)
         self.record_old = asdict(table_attr[code])
 
+        try:
+            values.append(self.record_old["nr"])
+        except KeyError:
+            pass
+
         for i in range(len(self.inputs_container.inputs)):
             input_field = self.inputs_container.inputs[i][1]
             col_name = self.name_mapping[self.inputs_container.inputs[i][0].text()]
