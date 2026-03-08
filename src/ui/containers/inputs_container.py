@@ -32,6 +32,7 @@ from repos import (
     ProductMaterialsRepo,
     ProductionLineRepo,
 )
+from services.movements_out_service import MovementsOutService
 from ui.components.input_factory import InputFactory
 
 
@@ -135,6 +136,20 @@ class InputsContainer(QWidget):
                 return
 
         repo = repo_class(Settings.DB_PATH)
+        record = record_class(*data)
+        movement_out_service = MovementsOutService()
+
+        if not movement_out_service.is_movement_allowed(record):
+            QMessageBox().warning(
+                self,
+                "Quantidade Inválida",
+                """
+                A quantidade resultante do produto é negativa, verifique que tem a 
+                quantidade necessária para sair.
+                """,
+            )
+            return
+
         repo.save(record_class(*data))
 
         self.data_manager.refresh_all()
