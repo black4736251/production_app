@@ -3,26 +3,26 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QPainter, QFont, QColor
 
 from core.appstate import AppState
-from models import MaterialCategory
+from models.enums import ProductCategory
 
 
-class TotalBoughtByMaterialCategory(QChartView):
+class TotalSoldByProductCategory(QChartView):
     def __init__(self):
         super().__init__()
         self.appstate = AppState()
-        self.materials = self.appstate.materials
-        self.movements_in = list(self.appstate.movements_in.values())
+        self.products = self.appstate.products
+        self.movements_out = list(self.appstate.movements_out.values())
         self.series = QPieSeries()
-        self.categories = [cat.value for cat in MaterialCategory]
+        self.categories = [cat.value for cat in ProductCategory]
 
         self._build_chart()
 
     def get_total_by_category(self) -> dict[str, int]:
         total_by_category = {cat: 0 for cat in self.categories}
 
-        for mi in self.movements_in:
-            mat = self.materials[mi.mat_code]
-            total_by_category[mat.category] += mi.quantity
+        for mo in self.movements_out:
+            pro = self.products[mo.pro_code]
+            total_by_category[pro.category] += mo.quantity
 
         return total_by_category
 
@@ -38,7 +38,7 @@ class TotalBoughtByMaterialCategory(QChartView):
 
         chart = QChart()
         chart.addSeries(self.series)
-        chart.setTitle("Total Comprado por Categoria de Material")
+        chart.setTitle("Total Vendido por Categoria de Produto")
         chart.setAnimationOptions(QChart.AnimationOption.SeriesAnimations)
         chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
 
@@ -58,8 +58,8 @@ class TotalBoughtByMaterialCategory(QChartView):
 
     def refresh(self):
         self.appstate = AppState()
-        self.materials = self.appstate.materials
-        self.movements_in = list(self.appstate.movements_in.values())
+        self.products = self.appstate.products
+        self.movements_out = list(self.appstate.movements_out.values())
 
         self.series = QPieSeries()
         self._build_chart()
