@@ -15,11 +15,11 @@ from core.settings import Settings
 from models import (
     Client,
     Supplier,
-    MaterialRecord,
-    ProductRecord,
-    MovementInRecord,
-    MovementOutRecord,
-    ProductionLineRecord,
+    MaterialView,
+    ProductView,
+    MovementInView,
+    MovementOutView,
+    ProductionLineView,
     ProductMaterials,
 )
 from repos import (
@@ -43,11 +43,11 @@ class PopupContainer(QWidget):
     MAPPING = {
         "clients": (ClientRepo, Client),
         "suppliers": (SupplierRepo, Supplier),
-        "materials": (MaterialRepo, MaterialRecord),
-        "products": (ProductRepo, ProductRecord),
-        "movements_in": (MovementInRepo, MovementInRecord),
-        "movements_out": (MovementOutRepo, MovementOutRecord),
-        "production_line": (ProductionLineRepo, ProductionLineRecord),
+        "materials": (MaterialRepo, MaterialView),
+        "products": (ProductRepo, ProductView),
+        "movements_in": (MovementInRepo, MovementInView),
+        "movements_out": (MovementOutRepo, MovementOutView),
+        "production_line": (ProductionLineRepo, ProductionLineView),
         "product_materials": (ProductMaterialsRepo, ProductMaterials),
     }
 
