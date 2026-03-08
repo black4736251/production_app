@@ -40,6 +40,6 @@ class MovementInRepo(Base):
             record_list = cursor.fetchall()
 
         for record in record_list:
-            record_dict[record[0]] = MovementInView(*record)
+            record_dict[str(record[0])] = MovementInView(*record)
 
         return record_dict

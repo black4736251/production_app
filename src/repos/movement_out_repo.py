@@ -40,6 +40,6 @@ class MovementOutRepo(Base):
             record_list = cursor.fetchall()
 
         for record in record_list:
-            record_dict[record[0]] = MovementOutView(*record)
+            record_dict[str(record[0])] = MovementOutView(*record)
 
         return record_dict

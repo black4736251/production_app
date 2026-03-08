@@ -39,6 +39,6 @@ class ProductionLineRepo(Base):
             record_list = cursor.fetchall()
 
         for record in record_list:
-            record_dict[record[0]] = ProductionLineView(*record)
+            record_dict[str(record[0])] = ProductionLineView(*record)
 
         return record_dict
