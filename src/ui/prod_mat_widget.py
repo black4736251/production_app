@@ -4,6 +4,8 @@ from PySide6.QtWidgets import QHBoxLayout, QPushButton, QVBoxLayout, QWidget
 
 from core.appstate import AppState
 from core.data_manager import DataManager
+from core.settings import Settings
+from repos.product_materials_repo import ProductMaterialsRepo
 from ui.containers.inputs_container import InputsContainer
 from ui.views.tree_widget import TreeWidget
 
@@ -52,16 +54,16 @@ class ProdMatWidget(QWidget):
     def insert_values(self):
         self.inputs.insert_data()
 
-        self.tree.load()
         self.data_changed.emit()
-        self.data_manager.refresh_all()
+        self.tree.load()
 
     def delete_values(self):
         items = self.tree.selectedItems()
+        records_to_delete = []
+
         for item in items:
             parent = item.parent()
 
-            records_to_delete = []
             if parent is not None:
                 pro_code = parent.text(0)
                 mat_code = item.text(0)
@@ -70,7 +72,6 @@ class ProdMatWidget(QWidget):
                     for record in list(AppState.product_materials.values())
                     if record.pro_code == pro_code and record.mat_code == mat_code
                 ]
-                print("hi from if")
             else:
                 pro_code = item.text(0)
                 records_to_delete = [
@@ -78,7 +79,11 @@ class ProdMatWidget(QWidget):
                     for record in list(AppState.product_materials.values())
                     if record.pro_code == pro_code
                 ]
-                print("hi from else")
-            print(records_to_delete)
 
+        repo = ProductMaterialsRepo(Settings.DB_PATH)
+        for record in records_to_delete:
+            repo.delete(record)
+
+        self.data_changed.emit()
+        self.data_manager.refresh_all()
         self.tree.load()
