@@ -33,6 +33,7 @@ from repos import (
     ProductionLineRepo,
 )
 from services.movements_out_service import MovementsOutService
+from services.production_line_service import ProductionLineService
 from ui.components.input_factory import InputFactory
 
 
@@ -138,14 +139,26 @@ class InputsContainer(QWidget):
         repo = repo_class(Settings.DB_PATH)
         record = record_class(*data)
         movement_out_service = MovementsOutService()
+        production_line_service = ProductionLineService()
 
         if not movement_out_service.is_movement_allowed(record):
-            QMessageBox().warning(
+            QMessageBox().critical(
                 self,
-                "Quantidade Inválida",
+                "Quantidade insuficiente de produtos",
                 """
                 A quantidade resultante do produto é negativa, verifique que tem a 
                 quantidade necessária para sair.
+                """,
+            )
+            return
+
+        if not production_line_service.is_production_valid(record):
+            QMessageBox().critical(
+                self,
+                "Quantidade insuficiente de materiais",
+                """
+                Não existe quantidade suficiente de algum produto para produzir
+                tantas quantidades deste produto
                 """,
             )
             return
