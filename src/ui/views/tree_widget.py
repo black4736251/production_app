@@ -10,7 +10,7 @@ class TreeWidget(QTreeWidget):
         self.setHeaderLabels(("Name", "Quantity"))
         self.setColumnWidth(0, 500)
         self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
+        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
 
         self.load()
 
