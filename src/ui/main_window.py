@@ -1,6 +1,7 @@
 import json
 from PySide6.QtWidgets import QMainWindow, QTabWidget
 
+from ui.charts.charts_widget import ChartsWidget
 from ui.display_widget import DisplayWidget
 from ui.prod_mat_widget import ProdMatWidget
 
@@ -24,10 +25,12 @@ class MainWindow(QMainWindow):
             DisplayWidget(table_name) for table_name in self.db_table_names
         ]
         self.prod_mat_widget = ProdMatWidget()
+        self.charts_widget = ChartsWidget()
 
         for i in range(len(self.display_widgets)):
             self.tabs.addTab(self.display_widgets[i], self.table_names[i])
         self.tabs.addTab(self.prod_mat_widget, self.table_names[-1])
+        self.tabs.addTab(self.charts_widget, "Estatística")
 
         self.display_widgets[0].data_changed.connect(
             self.display_widgets[5].inputs.update_combos
@@ -51,6 +54,8 @@ class MainWindow(QMainWindow):
         self.display_widgets[5].update_views()
         self.display_widgets[6].update_views()
 
+        self.charts_widget.refresh()
+
     def on_materials_update(self):
         self.display_widgets[4].inputs.update_combos()
         self.prod_mat_widget.inputs.update_combos()
@@ -59,17 +64,27 @@ class MainWindow(QMainWindow):
         self.display_widgets[4].update_views()
         self.display_widgets[6].update_views()
 
+        self.charts_widget.refresh()
+
     def on_movements_in_update(self):
         self.display_widgets[2].update_views()
 
+        self.charts_widget.refresh()
+
     def on_movements_out_update(self):
         self.display_widgets[3].update_views()
+
+        self.charts_widget.refresh()
 
     def on_production_line_update(self):
         self.display_widgets[2].update_views()
         self.display_widgets[3].update_views()
 
+        self.charts_widget.refresh()
+
     def on_product_materials_update(self):
         self.display_widgets[2].update_views()
         self.display_widgets[3].update_views()
         self.display_widgets[6].update_views()
+
+        self.charts_widget.refresh()
