@@ -113,7 +113,7 @@ class InputsContainer(QWidget):
             MovementOutRepo,
             MovementInRepo,
         ):
-            data.append(list(table_attr.keys())[-1] + 1)
+            data.append(int(list(table_attr.keys())[-1]) + 1)
 
         for _, input_field in self.inputs:
             value = ""
