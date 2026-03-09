@@ -178,9 +178,10 @@ class Base:
                 CREATE VIEW IF NOT EXISTS movements_in_details AS
                 SELECT
                     mi.*,
-                    (
+                    ROUND (
                         COALESCE(mi.quantity, 0) *
-                        COALESCE((SELECT SUM(unit_price) FROM materials WHERE code = mi.mat_code), 0)
+                        COALESCE((SELECT SUM(unit_price) FROM materials WHERE code = mi.mat_code), 0),
+                        2
                     ) AS total_price
                 FROM movements_in mi;
                 """)
@@ -189,9 +190,10 @@ class Base:
                 CREATE VIEW IF NOT EXISTS movements_out_details AS
                 SELECT
                     mo.*,
-                    (
+                    ROUND (
                         COALESCE(mo.quantity, 0) *
-                        COALESCE((SELECT SUM(unit_price) FROM products WHERE code = mo.pro_code), 0)
+                        COALESCE((SELECT SUM(unit_price) FROM products WHERE code = mo.pro_code), 0),
+                        2
                     ) AS total_price
                 FROM movements_out mo;
                 """)
@@ -200,12 +202,13 @@ class Base:
                 CREATE VIEW IF NOT EXISTS production_line_details AS
                 SELECT
                     pl.*,
-                    (
+                    ROUND (
                         COALESCE(pl.quantity, 0) *
                         COALESCE(
                             (SELECT SUM(production_cost) FROM product_details WHERE code = pl.pro_code)
                             , 0
-                        )
+                        ),
+                        2
                     ) AS total_cost
                 FROM production_line pl;
                 """)
