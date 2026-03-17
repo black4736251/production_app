@@ -57,17 +57,17 @@ class DisplayWidget(QWidget):
         self.list.updated.connect(self.data_changed.emit)
         self.inputs.data_inserted.connect(self.table.load)
 
-        self.add_btn = QPushButton("Add")
-        self.delete_btn = QPushButton("Delete")
+        self.add_btn = QPushButton("Adicionar")
+        self.delete_btn = QPushButton("Remover")
 
         self.add_btn.clicked.connect(self.insert_values)
         self.delete_btn.clicked.connect(self.delete_values)
 
-        self.switch_to_list = QPushButton("List view")
+        self.switch_to_list = QPushButton("Vista de lista")
         self.switch_to_list.clicked.connect(self.toggle_view)
         self.switch_to_list.setFixedWidth(100)
 
-        self.switch_to_table = QPushButton("Table view")
+        self.switch_to_table = QPushButton("Vista de tabela")
         self.switch_to_table.setDisabled(True)
         self.switch_to_table.clicked.connect(self.toggle_view)
         self.switch_to_table.setFixedWidth(100)
