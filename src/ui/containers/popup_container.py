@@ -67,7 +67,7 @@ class PopupContainer(QWidget):
         self.inputs_container = InputsContainer(master)
         self.inputs_container.update_combos()
 
-        self.title = QLabel("Edit")
+        self.title = QLabel("Editar")
         self.title.setStyleSheet("font: bold 20px")
         self.name_mapping = {
             k[0].text(): v
@@ -119,8 +119,8 @@ class PopupContainer(QWidget):
                     date.setDate(int(y), int(m), int(d))
                     input_widget.setDate(date)
 
-        self.confirm_btn = QPushButton("Confirm")
-        self.cancel_btn = QPushButton("Cancel")
+        self.confirm_btn = QPushButton("Confirmar")
+        self.cancel_btn = QPushButton("Cancelar")
 
         self.confirm_btn.clicked.connect(self.confirm)
         self.cancel_btn.clicked.connect(lambda: self.hide())
